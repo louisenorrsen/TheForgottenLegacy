@@ -1,0 +1,23 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+        "obj"
+    ],
+    "fileStates": {
+    },
+    "map.height": 10,
+    "map.renderOrder": null,
+    "map.tileHeight": 100,
+    "map.tileWidth": 100,
+    "map.width": 10,
+    "openFiles": [
+    ],
+    "project": "MUD.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+    ]
+}
