@@ -67,9 +67,9 @@ namespace MUD
             bool stop = false;
             string command;
             Console.WriteLine("Hej och välkommen till CMUD! Skriv in kommando enligt följande:\n" +
-                                "ladda /fil/ - ladda en fil med rum\n" +
-                                "spara - spara en fil med rum\n" +
-                                "starta - starta spelet");
+                                "ladda /profil/ - ladda en sparad profil\n" +
+                                "spara /profil/ - spara din progress\n" +
+                                "starta - starta nytt spel");
             do
             {
                 Console.Write($"> ");
@@ -78,11 +78,11 @@ namespace MUD
                 if (command.Equals("sluta", StringComparison.CurrentCultureIgnoreCase)) stop = true;
                 else if (command.Equals("ladda", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    Console.WriteLine($"{command} not yet implemented"); // NYI: ladda in en fil med rum
+                    Console.WriteLine($"{command} not yet implemented"); // NYI: ladda in en player profile med sparad progress
                 }
                 else if (command.Equals("spara", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    Console.WriteLine($"{command} not yet implemented"); // NYI: spara ner en fil med rum
+                    Console.WriteLine($"{command} not yet implemented"); // NYI: spara ner player progress
                 }
                 else if (command.Equals("starta", StringComparison.CurrentCultureIgnoreCase)) rooms[0].GoToNewRoom();
                 ChangePlayerPosition(command);
@@ -114,6 +114,10 @@ namespace MUD
             {
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.Write(i == text.Length - 1 ? $"\u001b[1m{text[i]}\u001b[0m\n" : $"\u001b[1m{text[i]}\u001b[0m");
+                if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Spacebar)
+                {
+                    delay = 0;
+                }
                 Thread.Sleep(delay);
             }
         }

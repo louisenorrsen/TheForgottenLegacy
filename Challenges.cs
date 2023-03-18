@@ -30,8 +30,8 @@ namespace MUD
                         rooms[5].RoomUnlocked = true;
                         break;
                 }
-                if (roomNumber != 0)TypewriterBold($"\nDu står i {rooms[roomNumber].Name}");
-                
+                if (roomNumber != 0) TypewriterBold($"\nDu står i {rooms[roomNumber].Name}");
+
             }
         };
         public static Action<int> Utomhus = (roomNumber) =>
@@ -80,7 +80,7 @@ namespace MUD
                 if (!player.HarTittatISpisen) Console.WriteLine("   spis - undersök askan i spisen");
                 answer = Console.ReadLine().Trim();
                 Console.WriteLine("------------------------------");
-                if (answer == "n" || answer == "s" || answer == "ö") { ChangePlayerPosition(answer); break; }
+                if (answer == "n" || answer == "s") { ChangePlayerPosition(answer); break; }
                 switch (answer)
                 {
                     case "sitta":
@@ -100,40 +100,48 @@ namespace MUD
                     default:
                         break;
                 }
-            } while (!player.HarSuttitIFotöljen || !player.HarInspekteratTavlan || !player.HarTittatISpisen || !player.HarTittatIKöket);
-            if (player.HarÖppnatByrån && player.HarInspekteratTavlan && rooms[4].ChallengeDone == false)
-            {
-                rooms[2].RoomUnlocked = true;
-                rooms[roomNumber].PrintActions();
-                answer = Console.ReadLine().Trim();
-                Console.WriteLine("------------------------------");
-                if (answer == "ö")
+
+                if (player.HarÖppnatByrån && player.HarInspekteratTavlan && rooms[4].ChallengeDone == false)
                 {
-                    Typewriter("Du tittar på ritningen en gång till och undersöker sedan området där den stora tavlan sitter. Efter stort besvär lyckas du ta ner tavlan och finner en gömd dörr. Dörren verkar inte gå att öppna utan rätt kod\n");
-                    do
+                    rooms[2].RoomUnlocked = true;
+                    rooms[roomNumber].PrintActions();
+                    if (!player.HarTittatISpisen) Console.WriteLine("   spis - undersök askan i spisen");
+                    answer = Console.ReadLine().Trim();
+                    Console.WriteLine("------------------------------");
+                    if (answer == "ö")
                     {
-                        Console.Write("Ange fyrsiffrig kod: ");
-                        answer = Console.ReadLine().Trim();
-                        Console.WriteLine("------------------------------");
-                        if (Convert.ToInt32(answer) == 1259)
+                        Typewriter("Du tittar på ritningen en gång till och undersöker sedan området där den stora tavlan sitter. Efter stort besvär lyckas du ta ner tavlan och finner en gömd dörr. Dörren verkar inte gå att öppna utan rätt kod\n");
+                        do
                         {
-                            Typewriter("Det var rätt kod, ett klickande ljud hörs och dörren är upplåst!", 30);
-                            rooms[roomNumber].ChallengeDone = true;
-                            ChangePlayerPosition("ö");
-                            break;
-                        }
-                        else Typewriter("Det var tyvärr fel kod, vill du prova igen?", 30);
-                        Console.WriteLine("   ja - prova igen");
-                        Console.WriteLine("   nej - ge upp");
-                        answer = Console.ReadLine().Trim();
-                        Console.WriteLine("------------------------------");
-                    } while (answer != "nej");
+                            Console.Write("Ange fyrsiffrig kod: ");
+                            answer = Console.ReadLine().Trim();
+                            Console.WriteLine("------------------------------");
+                            if (Convert.ToInt32(answer) == 1259)
+                            {
+                                Typewriter("Det var rätt kod, ett klickande ljud hörs och dörren är upplåst!\n", 30);
+                                rooms[4].ChallengeDone = true;
+                                ChangePlayerPosition("ö");
+                                break;
+                            }
+                            else Typewriter("Det var tyvärr fel kod, vill du prova igen?", 30);
+                            Console.WriteLine("   ja - prova igen");
+                            Console.WriteLine("   nej - ge upp");
+                            answer = Console.ReadLine().Trim();
+                            Console.WriteLine("------------------------------");
+                        } while (answer != "nej");
+                    }
+                    else if (answer.Equals("spis", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        Typewriter("\nDu tittar bland askan och finner en blänkande ädelsten, det ser ut som en \u001b[34mmörkblå safir\u001b[0m.");
+                        player.HarHittatSafiren = true;
+                        player.HarTittatISpisen = true;
+                    }
+                    else if (answer == "n" || answer == "s")
+                    {
+                        ChangePlayerPosition(answer);
+                    }
                 }
-                else if (answer == "n" || answer == "s")
-                {
-                    ChangePlayerPosition(answer);
-                }
-            }
+            } while (rooms[4].ChallengeDone == false);
         };
         public static Action<int> Köket = (roomNumber) =>
         {
@@ -152,8 +160,8 @@ namespace MUD
                 }
                 else if (answer.Equals("nyckel", StringComparison.CurrentCultureIgnoreCase)) { player.HarSovrumsNyckel = true; rooms[3].ChallengeDone = true; }
             } while (!player.HarSovrumsNyckel);
-             if (rooms[5].RoomUnlocked == false) FoundKey(roomNumber);
-             if (rooms[5].RoomUnlocked == true) rooms[roomNumber].PrintActions();
+            if (rooms[5].RoomUnlocked == false) FoundKey(roomNumber);
+            if (rooms[5].RoomUnlocked == true) rooms[roomNumber].PrintActions();
         };
         public static Action<int> Sovrummet = (roomNumber) =>
         {
@@ -169,7 +177,7 @@ namespace MUD
                 {
                     Typewriter("När du öppnar lådan i byrån hittar du en ritning över huset du befinner dig i. Något är dock märkligt med ritningen, det ser ut som att det ska finnas en dörr till ett bibliotek i vardagsrummet.");
                     player.HarÖppnatByrån = true;
-                    rooms[2].RoomUnlocked = true;
+                    rooms[2].RoomUnlocked = player.HarInspekteratTavlan;
                 }
                 else if (answer.Equals("bord", StringComparison.CurrentCultureIgnoreCase))
                 {
@@ -178,11 +186,11 @@ namespace MUD
                     Console.WriteLine("   nej - låt brevkniven ligga kvar");
                     answer = Console.ReadLine().Trim();
                     Console.WriteLine("------------------------------");
-                    player.HarTagitEnBrevkniv = answer == "ja" ? true : false;
+                    player.HarTagitEnBrevkniv = answer == "ja";
                     player.HarTittatPåBordet = true;
                 }
             } while (!player.HarÖppnatByrån || !player.HarTittatPåBordet);
-            if (player.HarTagitEnBrevkniv && player.HarÖppnatByrån) rooms[roomNumber].ChallengeDone = true;
+            if (player.HarTagitEnBrevkniv && player.HarÖppnatByrån) rooms[5].ChallengeDone = true;
             rooms[roomNumber].PrintActions();
         };
         public static Action<int> DefaultChallenge = (roomNumber) =>
