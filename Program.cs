@@ -1,4 +1,5 @@
 ﻿using static MUD.Rooms;
+using System.Threading;
 namespace MUD
 {
     public class Program
@@ -45,13 +46,16 @@ namespace MUD
             }
             public void GoToNewRoom()
             {
-                Console.WriteLine($"\n{Name}\n{Description}\n");
+                
+                TypewriterBold(Name);
+                Typewriter(Description);
                 player.RoomPosition = Number;
                 if (Challenge != null) Challenge(Number);
             }
+
             public void PrintActions()
             {
-                Console.WriteLine($"Vad vill du göra?");
+                Typewriter($"\nVad vill du göra?", 30);
                 if (North != -1 && rooms[North].RoomUnlocked) Console.WriteLine("   n - gå norrut");
                 if (East != -1 && rooms[East].RoomUnlocked) Console.WriteLine("   ö - gå österut");
                 if (South != -1 && rooms[South].RoomUnlocked) Console.WriteLine("   s - gå söderut");
@@ -69,7 +73,7 @@ namespace MUD
             do
             {
                 Console.Write($"> ");
-                command = Console.ReadLine();
+                command = Console.ReadLine().Trim();
                 Console.WriteLine("------------------------------");
                 if (command.Equals("sluta", StringComparison.CurrentCultureIgnoreCase)) stop = true;
                 else if (command.Equals("ladda", StringComparison.CurrentCultureIgnoreCase))
@@ -91,6 +95,27 @@ namespace MUD
             else if (command.Equals("ö", StringComparison.CurrentCultureIgnoreCase)) rooms[rooms[player.RoomPosition].East].GoToNewRoom();
             else if (command.Equals("s", StringComparison.CurrentCultureIgnoreCase)) rooms[rooms[player.RoomPosition].South].GoToNewRoom();
             else if (command.Equals("v", StringComparison.CurrentCultureIgnoreCase)) rooms[rooms[player.RoomPosition].West].GoToNewRoom();
+        }
+        public static void Typewriter(string text, int delay = 50)
+        {
+            for (int i = 0; i < text.Length; i++)
+            {
+                Console.Write((i == text.Length - 1 ? $"{text[i]}\n" : text[i]));
+                if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Spacebar)
+                {
+                    delay = 0;
+                }
+                Thread.Sleep(delay);
+            }
+        }
+        public static void TypewriterBold(string text, int delay = 50)
+        {
+            for (int i = 0; i < text.Length; i++)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.Write(i == text.Length - 1 ? $"\u001b[1m{text[i]}\u001b[0m\n" : $"\u001b[1m{text[i]}\u001b[0m");
+                Thread.Sleep(delay);
+            }
         }
     }
 }
