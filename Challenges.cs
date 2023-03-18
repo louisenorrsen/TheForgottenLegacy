@@ -74,10 +74,10 @@ namespace MUD
         {
             do
             {
-                rooms[roomNumber].PrintActions();
-                if (!player.HarSuttitIFotöljen) Console.WriteLine("   sitta - sätt dig ner i fåtöljen");
-                if (!player.HarInspekteratTavlan) Console.WriteLine("   tavla - inspektera tavlan");
-                if (!player.HarTittatISpisen) Console.WriteLine("   spis - undersök askan i spisen");
+                if (!player.HarÖppnatByrån && !player.HarInspekteratTavlan || !player.HarTittatISpisen || !player.HarSuttitIFotöljen) rooms[roomNumber].PrintActions();
+                if (!player.HarSuttitIFotöljen) Typewriter("   sitta - sätt dig ner i fåtöljen", 30);
+                if (!player.HarInspekteratTavlan) Typewriter("   tavla - inspektera tavlan", 30);
+                if (!player.HarTittatISpisen) Typewriter("   spis - undersök askan i spisen", 30);
                 answer = Console.ReadLine().Trim();
                 Console.WriteLine("------------------------------");
                 if (answer == "n" || answer == "s") { ChangePlayerPosition(answer); break; }
@@ -105,7 +105,7 @@ namespace MUD
                 {
                     rooms[2].RoomUnlocked = true;
                     rooms[roomNumber].PrintActions();
-                    if (!player.HarTittatISpisen) Console.WriteLine("   spis - undersök askan i spisen");
+                    if (!player.HarTittatISpisen) Typewriter("   spis - undersök askan i spisen", 30);
                     answer = Console.ReadLine().Trim();
                     Console.WriteLine("------------------------------");
                     if (answer == "ö")
@@ -149,7 +149,7 @@ namespace MUD
             {
                 rooms[roomNumber].PrintActions();
                 if (!player.HarTittatIKöket) Console.WriteLine("   titta - se dig omkring");
-                if (player.HarTittatIKöket && !player.HarSovrumsNyckel) Console.WriteLine("   nyckel - plocka upp nyckeln");
+                if (player.HarTittatIKöket && !player.HarSovrumsNyckel) Typewriter("   nyckel - plocka upp nyckeln", 30);
                 answer = Console.ReadLine().Trim();
                 if (answer == "n" || answer == "s" || answer == "v") { ChangePlayerPosition(answer); break; }
                 Console.WriteLine("------------------------------");
@@ -168,22 +168,22 @@ namespace MUD
             do
             {
                 rooms[roomNumber].PrintActions();
-                if (!player.HarÖppnatByrån) Console.WriteLine("   byrå - öppna lådan");
-                if (!player.HarTittatPåBordet) Console.WriteLine("   bord - undersök spegelbordet");
+                if (!player.HarÖppnatByrån) Typewriter("   byrå - öppna lådan", 30);
+                if (!player.HarTittatPåBordet) Typewriter("   bord - undersök spegelbordet", 30);
                 answer = Console.ReadLine().Trim();
                 Console.WriteLine("------------------------------");
                 if (answer == "n" || answer == "s" || answer == "ö") { ChangePlayerPosition(answer); break; }
                 else if (answer.Equals("byrå", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    Typewriter("När du öppnar lådan i byrån hittar du en ritning över huset du befinner dig i. Något är dock märkligt med ritningen, det ser ut som att det ska finnas en dörr till ett bibliotek i vardagsrummet.");
+                    Typewriter("\nNär du öppnar lådan i byrån hittar du en \u001b[31mritning över huset\u001b[37m du befinner dig i. Något är dock märkligt med ritningen, det ser ut som att det ska finnas en dörr till ett bibliotek i vardagsrummet.");
                     player.HarÖppnatByrån = true;
                     rooms[2].RoomUnlocked = player.HarInspekteratTavlan;
                 }
                 else if (answer.Equals("bord", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    Typewriter("På spegelbordet ligger en brevkniv, vill du plocka upp den?", 30);
-                    Console.WriteLine("   ja - plocka upp brevkniven");
-                    Console.WriteLine("   nej - låt brevkniven ligga kvar");
+                    Typewriter("\nPå spegelbordet ligger en brevkniv, vill du plocka upp den?"); // TODO fix foreground color 
+                    Typewriter("   ja - plocka upp brevkniven", 30);
+                    Typewriter("   nej - låt brevkniven ligga kvar", 30);
                     answer = Console.ReadLine().Trim();
                     Console.WriteLine("------------------------------");
                     player.HarTagitEnBrevkniv = answer == "ja";
@@ -193,7 +193,20 @@ namespace MUD
             if (player.HarTagitEnBrevkniv && player.HarÖppnatByrån) rooms[5].ChallengeDone = true;
             rooms[roomNumber].PrintActions();
         };
-        public static Action<int> DefaultChallenge = (roomNumber) =>
+        public static Action<int> Biblioteket = (roomNumber) =>
+        {
+            rooms[roomNumber].PrintActions();
+            Typewriter("   hylla - inspektera bokhyllan", 30);
+            Typewriter("   maskin - inspektera skrivmaskinen", 30);
+            Typewriter("   bok - inspektera anteckningsboken", 30);
+            answer = Console.ReadLine().Trim();
+            Console.WriteLine("------------------------------");
+        };
+        public static Action<int> Badrummet = (roomNumber) =>
+        {
+            
+        };
+        public static Action<int> Default = (roomNumber) =>
         {
             if (true)
             {

@@ -32,8 +32,8 @@ namespace MUD
                 2,
                 "Biblioteket",
                 "Du befinner dig i ett stort bibliotek med höga bokhyllor längs väggarna. En gammal skrivmaskin står på ett bord vid fönstret. En gammal anteckningsbok med gula sidor och ett märkligt mönster på pärmarna ligger öppen bredvid skrivmaskinen.",
-                6, -1, 4, 9,
-                null
+                9, 6, -1, 4,
+                Biblioteket
             ),
             new Room
             (
@@ -56,7 +56,7 @@ namespace MUD
                 5,
                 "Sovrummet",
                 "Rummet är täckt av ett tjockt lager av damm och spindelnät. En gammal säng med trasiga täcken och kuddar står i ena hörnet, medan en rucklig byrå och ett antikt spegelbord står mot väggen på andra sidan av rummet.",
-                -1, -1, 3, -1,
+                -1, 3, -1, -1,
                 Sovrummet
             ),
             new Room
@@ -65,8 +65,11 @@ namespace MUD
                 "Badrummet",
                 "Du står i badrummet, ett litet utrymme med träpanel på väggarna och en trägolv som knarrar under dina fötter. Ett antikt handfat av keramik med en gammal kopparpipa står vid väggen. På andra sidan rummet finns en liten duschkabin med ett randigt duschdraperi. En spegel täcker hela väggen framför dig.",
                 -1, -1, 2, -1,
-                null
-            ),
+                Badrummet
+            )
+            {
+                RoomUnlocked = true
+            },
             new Room
             (
                 7,
@@ -96,7 +99,7 @@ namespace MUD
                 10,
                 "Tornrummet",
                 "Tornrummet ligger högst upp i huset och nås genom en smal spiraltrappa som leder till en dörr. När du öppnar dörren och kliver in i rummet, slås du av den fantastiska utsikten från de höga fönstren. Rummet är ganska stort och innehåller en säng, en fåtölj och en liten bokhylla. Det är uppenbart att detta rum har använts som en plats för meditation eller ensamhet, med dess fridfulla atmosfär och lugna utsikt.",
-                -1, -1, 8, -1,
+                -1, -1, -1, 8,
                 null
             )
          };

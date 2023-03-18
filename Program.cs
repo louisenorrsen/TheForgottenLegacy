@@ -7,7 +7,7 @@ namespace MUD
         public class Player
         {
             public int RoomPosition;
-            public bool HasHouseKey, HarSuttitIFotöljen, HarInspekteratTavlan, HarTittatISpisen, HarHittatSafiren, HarTittatIKöket, HarÖppnatByrån, HarTittatPåBordet, HarTagitEnBrevkniv, HarVardagsrumsNyckel, HarSovrumsNyckel;
+            public bool HasHouseKey, HarSuttitIFotöljen, HarInspekteratTavlan, HarTittatISpisen, HarHittatSafiren, HarTittatIKöket, HarÖppnatByrån, HarTittatPåBordet, HarTagitEnBrevkniv, HarVardagsrumsNyckel, HarSovrumsNyckel, HarLästBrevet;
             public Player(int roomPosition, bool hasHouseKey = true)
             {
                 RoomPosition = roomPosition;
@@ -22,6 +22,8 @@ namespace MUD
                 HarHittatSafiren = false;
                 HarTittatIKöket = false;
                 HarTagitEnBrevkniv = false;
+                HarLästBrevet = false;
+
             }
         }
         public static Player player = new(0); // TBD: Ändra så Players finns i en lista av spelare. I början får man fylla i vad man heter och då läggs en ny spelare till.
@@ -65,11 +67,11 @@ namespace MUD
         public static void Main(string[] args)
         {
             bool stop = false;
-            string command;
+            string command; 
             Console.WriteLine("Hej och välkommen till CMUD! Skriv in kommando enligt följande:\n" +
                                 "ladda /profil/ - ladda en sparad profil\n" +
                                 "spara /profil/ - spara din progress\n" +
-                                "starta - starta nytt spel");
+                                "starta - starta nytt spel"); // NYI: Låt spelaren skriva in sitt namn som sparas i en variabel som återanvänds senare i spelet.
             do
             {
                 Console.Write($"> ");
