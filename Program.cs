@@ -7,7 +7,7 @@ namespace MUD
         public class Player
         {
             public int RoomPosition;
-            public bool HasHouseKey, HarSuttitIFotöljen, HarInspekteratTavlan, HarTittatISpisen, HarHittatSafiren, HarTittatIKöket, HarÖppnatByrån, HarTittatPåBordet, HarTagitEnBrevkniv, HarVardagsrumsNyckel, HarSovrumsNyckel, HarLästBrevet, HarHittatBoken;
+            public bool HasHouseKey, HarSuttitIFotöljen, HarInspekteratTavlan, HarTittatISpisen, HarHittatSafiren, HarTittatIKöket, HarÖppnatByrån, HarTittatPåBordet, HarTagitEnBrevkniv, HarVardagsrumsNyckel, HarSovrumsNyckel, HarLästBrevet, HarHittatBoken, HarHittatKassaskåpet, HarInspekteratSpegeln, HarÖppnatKassaskåpet;
             public Player(int roomPosition, bool hasHouseKey = true)
             {
                 RoomPosition = roomPosition;
@@ -24,7 +24,9 @@ namespace MUD
                 HarTagitEnBrevkniv = false;
                 HarLästBrevet = false;
                 HarHittatBoken = false;
-
+                HarHittatKassaskåpet = false;
+                HarInspekteratSpegeln = false;
+                HarÖppnatKassaskåpet = false;
             }
         }
         public static Player player = new(0); // TBD: Ändra så Players finns i en lista av spelare. I början får man fylla i vad man heter och då läggs en ny spelare till.
@@ -49,7 +51,7 @@ namespace MUD
             }
             public void GoToNewRoom()
             {
-                
+                // PrintMap(Number); NYI: Karta när spelaren går in i ett nytt rum
                 TypewriterBold(Name);
                 Typewriter(Description);
                 player.RoomPosition = Number;
@@ -64,20 +66,68 @@ namespace MUD
                 if (South != -1 && rooms[South].RoomUnlocked) Console.WriteLine("   s - gå söderut");
                 if (West != -1 && rooms[West].RoomUnlocked) Console.WriteLine("   v - gå västerut");
             }
+            public void PrintMap(int roomNumber)
+            {
+                switch (roomNumber) 
+                { 
+                    case 1: 
+                        Console.WriteLine(" Karta  [X]      ");
+                        break;
+                    case 2:
+                        Console.WriteLine("     [ ][ ]      ");
+                        Console.WriteLine(" Karta  [ ][X]   ");
+                        Console.WriteLine("        [ ]      ");
+                        break;
+                    case 3:
+                        Console.WriteLine("        [X]      ");
+                        Console.WriteLine(" Karta  [ ]      ");
+                        Console.WriteLine("        [ ]      ");
+                        break;
+                    case 4:
+                        Console.WriteLine("  Karta [X]      ");
+                        Console.WriteLine("        [ ]      ");
+                        break;
+                    case 5:
+                        Console.WriteLine("     [X][ ]      ");
+                        Console.WriteLine(" Karta  [ ]      ");
+                        Console.WriteLine("        [ ]      ");
+                        break;
+                    case 6:
+                        Console.WriteLine("     [ ][ ]      ");
+                        Console.WriteLine(" Karta  [ ][ ][X]");
+                        Console.WriteLine("        [ ]      ");
+                        break;
+                    case 7:
+                        Console.WriteLine("        [X]      ");
+                        break;
+                    case 8:
+                        Console.WriteLine("        [X]      ");
+                        break;
+                    case 9:
+                        Console.WriteLine("            [X]   ");
+                        Console.WriteLine("     [ ][ ] //    "); 
+                        Console.WriteLine(" Karta  [ ][ ][ ]");
+                        Console.WriteLine("        [ ]      ");
+                        break;
+                    case 10:
+                        Console.WriteLine("        [X]      ");
+                        break;
+                }
+            } // NYI: Kartan ska visa alla upplåsta rum och ett kryss symboliserar spelarens position
         }
         public static void Main(string[] args)
         {
             bool stop = false;
-            string command; 
-            Console.WriteLine("Hej och välkommen till CMUD! Skriv in kommando enligt följande:\n" +
-                                "ladda /profil/ - ladda en sparad profil\n" +
-                                "spara /profil/ - spara din progress\n" +
+            string command;
+            Console.WriteLine("Hej och välkommen till The Forgotten Legacy! Skriv in kommando enligt följande:\n" +
+                                "ladda /profil/ - ladda en sparad profil *NYI*\n" +
+                                "spara /profil/ - spara din progress *NYI*\n" +
                                 "starta - starta nytt spel"); // NYI: Låt spelaren skriva in sitt namn som sparas i en variabel som återanvänds senare i spelet.
             do
             {
                 Console.Write($"> ");
                 command = Console.ReadLine().Trim();
-                Console.WriteLine("------------------------------");
+                Console.WriteLine("\u001b[38;5;208m------------------------------\u001b[0m");
                 if (command.Equals("sluta", StringComparison.CurrentCultureIgnoreCase)) stop = true;
                 else if (command.Equals("ladda", StringComparison.CurrentCultureIgnoreCase))
                 {
@@ -116,7 +166,7 @@ namespace MUD
             for (int i = 0; i < text.Length; i++)
             {
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                Console.Write(i == text.Length - 1 ? $"\u001b[1m{text[i]}\u001b[0m\n" : $"\u001b[1m{text[i]}\u001b[0m");
+                Console.Write(i == text.Length - 1 ? $"{text[i]}\u001b[0m\n" : $"\u001b[1m{text[i]}");
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Spacebar)
                 {
                     delay = 0;

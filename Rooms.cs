@@ -64,7 +64,7 @@ namespace MUD
                 6,
                 "Badrummet",
                 "Du står i badrummet, ett litet utrymme med träpanel på väggarna och en trägolv som knarrar under dina fötter. Ett antikt handfat av keramik med en gammal kopparpipa står vid väggen. På andra sidan rummet finns en liten duschkabin med ett randigt duschdraperi. En spegel täcker hela väggen framför dig.",
-                -1, -1, 2, -1,
+                -1, -1, -1, 2,
                 Badrummet
             )
             {
@@ -92,7 +92,7 @@ namespace MUD
                 "Hemligt rum",
                 "Du har upptäckt en dold dörr bakom en hylla. När du öppnar dörren avslöjas ett litet rum som verkar ha varit gömt i årtionden. Rummet är tomt förutom några gamla möbler som ser ut att ha använts för en gång i tiden. Du kan känna historiens närvaro när du tittar runt i det gömda rummet.",
                 7, -1, 2, -1,
-                null
+                HemligaRummet
             ),
             new Room
             (
