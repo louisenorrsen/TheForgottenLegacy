@@ -7,7 +7,7 @@ namespace MUD
         public class Player
         {
             public int RoomPosition;
-            public bool HasHouseKey, HarSuttitIFotöljen, HarInspekteratTavlan, HarTittatISpisen, HarHittatSafiren, HarTittatIKöket, HarÖppnatByrån, HarTittatPåBordet, HarTagitEnBrevkniv, HarVardagsrumsNyckel, HarSovrumsNyckel, HarLästBrevet;
+            public bool HasHouseKey, HarSuttitIFotöljen, HarInspekteratTavlan, HarTittatISpisen, HarHittatSafiren, HarTittatIKöket, HarÖppnatByrån, HarTittatPåBordet, HarTagitEnBrevkniv, HarVardagsrumsNyckel, HarSovrumsNyckel, HarLästBrevet, HarHittatBoken;
             public Player(int roomPosition, bool hasHouseKey = true)
             {
                 RoomPosition = roomPosition;
@@ -23,6 +23,7 @@ namespace MUD
                 HarTittatIKöket = false;
                 HarTagitEnBrevkniv = false;
                 HarLästBrevet = false;
+                HarHittatBoken = false;
 
             }
         }

@@ -1,4 +1,7 @@
-﻿using static MUD.Program;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.ConstrainedExecution;
+using static MUD.Program;
 using static MUD.Rooms;
 
 namespace MUD
@@ -74,7 +77,7 @@ namespace MUD
         {
             do
             {
-                if (!player.HarÖppnatByrån && !player.HarInspekteratTavlan || !player.HarTittatISpisen || !player.HarSuttitIFotöljen) rooms[roomNumber].PrintActions();
+                if (!player.HarÖppnatByrån || !player.HarInspekteratTavlan || !player.HarTittatISpisen || !player.HarSuttitIFotöljen) rooms[roomNumber].PrintActions();
                 if (!player.HarSuttitIFotöljen) Typewriter("   sitta - sätt dig ner i fåtöljen", 30);
                 if (!player.HarInspekteratTavlan) Typewriter("   tavla - inspektera tavlan", 30);
                 if (!player.HarTittatISpisen) Typewriter("   spis - undersök askan i spisen", 30);
@@ -195,22 +198,85 @@ namespace MUD
         };
         public static Action<int> Biblioteket = (roomNumber) =>
         {
-            rooms[roomNumber].PrintActions();
-            Typewriter("   hylla - inspektera bokhyllan", 30);
-            Typewriter("   maskin - inspektera skrivmaskinen", 30);
-            Typewriter("   bok - inspektera anteckningsboken", 30);
-            answer = Console.ReadLine().Trim();
-            Console.WriteLine("------------------------------");
+            do
+            {
+                if (!player.HarHittatBoken)
+                {
+                    rooms[roomNumber].PrintActions();
+                    Typewriter("   hylla - inspektera bokhyllan", 30);
+                    Typewriter("   maskin - inspektera skrivmaskinen", 30);
+                    Typewriter("   bok - inspektera anteckningsboken", 30);
+                }
+                else
+                {
+                    Typewriter("Vill du ta tag i boken?");
+                    Typewriter("   ja - ta tag i boken", 30);
+                    Typewriter("   nej - låt boken vara", 30);
+                }
+                answer = Console.ReadLine().Trim();
+                Console.WriteLine("------------------------------");
+                if (answer == "n" || answer == "v" || answer == "ö") { ChangePlayerPosition(answer); break; }
+                switch (answer)
+                {
+                    case "hylla":
+                        if (!player.HarLästBrevet)
+                        {
+                            Typewriter("\nDu står framför en stor bokhylla full av dammiga böcker i en mörk del av biblioteket.Många av böckerna ser ut att aldrig ha lästs och en del av dem verkar ha fallit sönder med tiden.Du ser några böcker med titlar som fångar din uppmärksamhet, men du kan inte hjälpa att undra om det finns någon annan bok här som kan vara viktigare.");
+                        }
+                        else
+                        {
+                            Typewriter("\nDu tittar på bokhyllan igen och din blick fastnar på en bok som står lite förskjuten från de andra. Titeln på boken lyder \"Codex Seraphinianus\" och författaren är Luigi Serafini, precis som det stod i brevet du läste tidigare. Boken ser ut att vara gammal och ovanlig, och du kan inte hjälpa att undra vad som döljer sig mellan dess sidor.");
+                            player.HarHittatBoken = true;
+                        }
+                        break;
+                    case "maskin":
+                        Typewriter("\nNär du inspekterar skrivmaskinen ser du ett papper med ett konstigt diagram på det. Det verkar vara någon form av kod, men du är inte säker på vad det betyder. Diagrammet har alla bokstäver i alfabetet, var och en med en motsvarande symbol under den. Det finns också flera rader med bokstäver som verkar vara blandade. Det ser ut som någon form av pussel som behöver lösas.\n");
+                        Console.WriteLine("A B C D E F G H I J K L M N O P Q R S T U V W X Y Z\r\n| | | | | | | | | | | | | | | | | | | | | | | | | |\r\nX O M C H L F U T I S Z E B A D J G K P Q R V W Y N");
+                        break;
+                    case "bok":
+                        Typewriter("\nNär du inspekterar anteckningsboken hittar du en skiss av ett halsband bredvid texten SAFIR. Skissen är imponerande och safiren sticker ut från blyertslinjerna med sin lysande blåa färg. Det är tydligt att skissen har gjorts med stor noggrannhet och omsorg, som om halbandet betyder väldigt mycket för den som ritade den.");
+                        Console.WriteLine("                       ");
+                        Console.WriteLine("                 \u001b[2m##### ");
+                        Console.WriteLine("                #     #");
+                        Console.WriteLine("                #     #");
+                        Console.WriteLine("       \u001b[0m\u001b[3mSAFIR\u001b[0m\u001b[2m     #   # ");
+                        Console.WriteLine("                  # #  ");
+                        Console.WriteLine("                   #   ");
+                        Console.WriteLine("                  \u001b[0m\u001b[34m/ \\ ");
+                        Console.WriteLine("                  \\_/\u001b[0m ");
+                        Console.WriteLine("                       ");
+                        break;
+                    case "ja":
+                        Typewriter("\nNär du drar ut boken ur bokhyllan hör du ett klickande ljud och plötsligt öppnas bokhyllan upp sig och visar en smal öppning bakom sig. Öppningen verkar leda till en hemlig passage.");
+                        rooms[9].RoomUnlocked = true;
+                        rooms[2].ChallengeDone = true;
+                        break;
+                    case "nej":
+                        Typewriter("\nDu tittar på boken med tvekan. Något känns inte rätt. Du kan inte låta bli att undra vad som skulle hända om du drar ut den. Men kanske är det bäst att låta den vara.");
+                        break;
+                    default: break;
+                }
+
+            } while (rooms[2].ChallengeDone == false);
         };
         public static Action<int> Badrummet = (roomNumber) =>
         {
-            
+
         };
         public static Action<int> Default = (roomNumber) =>
         {
             if (true)
             {
-                Console.WriteLine("");
+                Console.WriteLine("                       ");
+                Console.WriteLine("                 ##### ");
+                Console.WriteLine("                #     #");
+                Console.WriteLine("                #     #");
+                Console.WriteLine("       \u001b[3mSAFIR\u001b[0m     #   # ");
+                Console.WriteLine("                  # #  ");
+                Console.WriteLine("                   #   ");
+                Console.WriteLine("                  \u001b[34m/ \\ ");
+                Console.WriteLine("                  \\_/\u001b[0m ");
+                Console.WriteLine("                       ");
             }
         };
     }
