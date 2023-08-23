@@ -247,7 +247,7 @@ namespace MUD
                     case "ja":
                         Typewriter("\nNär du drar ut boken ur bokhyllan hör du ett klickande ljud och plötsligt öppnar bokhyllan upp sig och visar en smal öppning bakom sig. Öppningen verkar leda till en hemlig passage.");
                         rooms[9].RoomUnlocked = true;
-                        rooms[roomNumber].PrintActions();
+                        rooms[roomNumber].PrintActions(); // FIXME: dubbla actions skrivs ut!
                         rooms[2].ChallengeDone = true;
                         break;
                     case "nej":
@@ -313,7 +313,7 @@ namespace MUD
         };
         public static Action<int> HemligaRummet = (roomNumber) =>
         {
-            Typewriter("\nDet här är slutet på spelet för tillfälligt, nu version ute inom kort!");
+            Typewriter("\nDet här är slutet på spelet för tillfälligt, håll ögonen öppna efter en ny version!");
         };
     }
 }
